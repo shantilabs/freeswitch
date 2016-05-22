@@ -294,7 +294,7 @@ RUN chown -R $FREESWITCH_USER:daemon /usr/local/freeswitch
 RUN touch $FREESWITCH_LOGDIR/freeswitch.log \
     && chown $FREESWITCH_USER:daemon $FREESWITCH_LOGDIR/freeswitch.log
 
-VOLUME [ $FREESWITCH_LOGDIR ]
+VOLUME [ "$FREESWITCH_LOGDIR" ]
 
 # for SIP signal trafic 5998 for internal interface and 5080 for external providers
 EXPOSE 5998/udp 5080/udp
