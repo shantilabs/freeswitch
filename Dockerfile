@@ -60,6 +60,7 @@ RUN touch /etc/ld.so.conf.d/x86_64-linux-freeswitch.conf \
 
 ENV FREESWITCH_USER=freeswitch \
     FREESWITCH_VERSION=1.6.7 \
+    FREESWITCH_LOGDIR=/usr/local/freeswitch/log \
     FLITE_VERSION=2.0.0 \
     G722_1_VERSION=0.2.0 \
     ILBC_VERSION=0.0.1 \
@@ -290,10 +291,10 @@ RUN adduser \
 RUN chown -R $FREESWITCH_USER:daemon /usr/local/freeswitch
 
 # Create the log file.
-RUN touch /usr/local/freeswitch/log/freeswitch.log \
-    && chown $FREESWITCH_USER:daemon /usr/local/freeswitch/log/freeswitch.log
+RUN touch $FREESWITCH_LOGDIR/freeswitch.log \
+    && chown $FREESWITCH_USER:daemon $FREESWITCH_LOGDIR/freeswitch.log
 
-VOLUME ["/usr/local/freeswitch/log/"]
+VOLUME [ $FREESWITCH_LOGDIR ]
 
 # for SIP signal trafic 5998 for internal interface and 5080 for external providers
 EXPOSE 5998/udp 5080/udp
@@ -305,4 +306,4 @@ USER $FREESWITCH_USER
 
 CMD service snmpd start \
     && service freeswitch start \
-    && tail -f /usr/local/freeswitch/log/freeswitch.log
+    && tail -f $FREESWITCH_LOGDIR/freeswitch.log
