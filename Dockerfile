@@ -1,6 +1,10 @@
 # based on https://github.com/BetterVoice/freeswitch-container
 FROM ubuntu:14.04
 
+ENV FREESWITCH_USER=freeswitch \
+    FREESWITCH_VERSION=1.6.7 \
+    FREESWITCH_LOGDIR=/usr/local/freeswitch/log
+
 # Install Dependencies.
 RUN set -x \
     && echo "deb http://us.archive.ubuntu.com/ubuntu/ trusty multiverse" >> /etc/apt/source.list \
@@ -51,133 +55,15 @@ RUN set -x \
         yasm \
         zlib1g-dev \
     && rm -rf /var/lib/apt/lists/* \
-    && apt-get purge -y
-
-RUN ln -sf /usr/bin/gawk /usr/bin/awk
-
-RUN touch /etc/ld.so.conf.d/x86_64-linux-freeswitch.conf \
-    && echo "/usr/local/lib" >> /etc/ld.so.conf.d/x86_64-linux-freeswitch.conf
-
-ENV FREESWITCH_USER=freeswitch \
-    FREESWITCH_VERSION=1.6.7 \
-    FREESWITCH_LOGDIR=/usr/local/freeswitch/log \
-    FLITE_VERSION=2.0.0 \
-    G722_1_VERSION=0.2.0 \
-    ILBC_VERSION=0.0.1 \
-    LIBBROADVOICE_VERSION=0.1.0 \
-    LIBCODEC2_VERSION=2.59 \
-    LIBSHOUT_VERSION=2.3.1 \
-    LIBSILK_VERSION=1.0.8 \
-    LIBSNDFILE_VERSION=1.0.25 \
-    LIBVPX_VERSION=1.4.0 \
-    LIBYUV_VERSION=0.0.1280 \
-    MONGO_C_DRIVER_VERSION=1.1.0 \
-    MPG123_VERSION=1.22.2 \
-    OPUS_VERSION=1.1 \
-    SOUNDTOUCH_VERSION=1.9.0
-
-#RUN cd /usr/src \
-#    && wget http://files.freeswitch.org/downloads/libs/libyuv-$LIBYUV_VERSION.tar.gz \
-#    && tar -xzvf libyuv-$LIBYUV_VERSION.tar.gz \
-#    && rm libyuv-$LIBYUV_VERSION.tar.gz \
-#    && cd libyuv-$LIBYUV_VERSION \
-#    && make \
-#    && make install
-#
-#RUN cd /usr/src \
-#    && wget http://files.freeswitch.org/downloads/libs/libvpx-$LIBVPX_VERSION.tar.gz \
-#    && tar -xzvf libvpx-$LIBVPX_VERSION.tar.gz \
-#    && rm libvpx-$LIBVPX_VERSION.tar.gz \
-#    && cd libvpx-$LIBVPX_VERSION \
-#    && ./configure \
-#        --enable-shared \
-#        --prefix=/usr/local \
-#    && make \
-#    && make install
-#
-#RUN cd /usr/src \
-#    && wget http://files.freeswitch.org/downloads/libs/broadvoice-$LIBBROADVOICE_VERSION.tar.gz \
-#    && tar -xzvf broadvoice-$LIBBROADVOICE_VERSION.tar.gz \
-#    && rm broadvoice-$LIBBROADVOICE_VERSION.tar.gz \
-#    && cd broadvoice-$LIBBROADVOICE_VERSION \
-#    && ./autogen.sh \
-#    && ./configure \
-#        --enable-shared \
-#        --prefix=/usr/local \
-#    && make \
-#    && make install
-#
-#RUN cd /usr/src \
-#    && wget http://files.freeswitch.org/downloads/libs/libcodec2-$LIBCODEC2_VERSION.tar.gz \
-#    && tar -xzvf libcodec2-$LIBCODEC2_VERSION.tar.gz \
-#    && rm libcodec2-$LIBCODEC2_VERSION.tar.gz \
-#    && cd libcodec2-$LIBCODEC2_VERSION \
-#    && ./bootstrap.sh \
-#    && ./configure \
-#        --enable-shared \
-#        --prefix=/usr/local \
-#    && make \
-#    && make install
-#
-#RUN cd /usr/src \
-#    && wget http://files.freeswitch.org/downloads/libs/flite-$FLITE_VERSION.tar.gz \
-#    && tar -xzvf flite-$FLITE_VERSION.tar.gz \
-#    && rm flite-$FLITE_VERSION.tar.gz \
-#    && cd flite-$FLITE_VERSION \
-#    && ./configure \
-#        --enable-shared \
-#        --prefix=/usr/local \
-#    && make \
-#    && make install
-#
-#RUN cd /usr/src \
-#    && wget http://files.freeswitch.org/downloads/libs/ilbc-$ILBC_VERSION.tar.gz \
-#    && tar -xzvf ilbc-$ILBC_VERSION.tar.gz \
-#    && rm ilbc-$ILBC_VERSION.tar.gz \
-#    && cd ilbc-$ILBC_VERSION \
-#    && ./bootstrap.sh \
-#    && ./configure \
-#        --enable-shared \
-#        --prefix=/usr/local \
-#    && make \
-#    && make install
-#
-#RUN cd /usr/src \
-#    && wget http://files.freeswitch.org/downloads/libs/mongo-c-driver-$MONGO_C_DRIVER_VERSION.tar.gz \
-#    && tar -xzvf mongo-c-driver-$MONGO_C_DRIVER_VERSION.tar.gz \
-#    && rm mongo-c-driver-$MONGO_C_DRIVER_VERSION.tar.gz \
-#    && cd mongo-c-driver-$MONGO_C_DRIVER_VERSION \
-#    && ./configure \
-#        --enable-shared \
-#        --prefix=/usr/local \
-#    && make \
-#    && make install
-#
-#RUN cd /usr/src \
-#    && wget http://files.freeswitch.org/downloads/libs/opus-$OPUS_VERSION.tar.gz \
-#    && tar -xzvf opus-$OPUS_VERSION.tar.gz \
-#    && rm opus-$OPUS_VERSION.tar.gz \
-#    && cd opus-$OPUS_VERSION \
-#    && ./autogen.sh \
-#    && ./configure \
-#        --enable-shared \
-#        --prefix=/usr/local \
-#    && make \
-#    && make install
-#
-#RUN cd /usr/src \
-#    && wget http://files.freeswitch.org/downloads/libs/g722_1-$G722_1_VERSION.tar.gz \
-#    && tar -xzvf g722_1-$G722_1_VERSION.tar.gz \
-#    && rm g722_1-$G722_1_VERSION.tar.gz \
-#    && cd g722_1-$G722_1_VERSION \
-#    && ./autogen.sh \
-#    && ./configure \
-#        --enable-shared \
-#        --prefix=/usr/local \
-#    && make \
-#    && make install
-
-RUN cd /usr/src \
+    && apt-get purge -y \
+    \
+    && ln -sf /usr/bin/gawk /usr/bin/awk \
+    \
+    && touch /etc/ld.so.conf.d/x86_64-linux-freeswitch.conf \
+    && echo "/usr/local/lib" >> /etc/ld.so.conf.d/x86_64-linux-freeswitch.conf \
+    \
+    && export LIBSHOUT_VERSION=2.3.1 \
+    && cd /usr/src \
     && wget http://downloads.xiph.org/releases/libshout/libshout-$LIBSHOUT_VERSION.tar.gz \
     && tar -xzvf libshout-$LIBSHOUT_VERSION.tar.gz \
     && rm libshout-$LIBSHOUT_VERSION.tar.gz \
@@ -186,10 +72,11 @@ RUN cd /usr/src \
         --enable-shared \
         --prefix=/usr/local \
     && make \
-    && make install
-
-# for mod_shout
-RUN cd /usr/src \
+    && make install \
+    && echo "for mod_shout" \
+    \
+    && export MPG123_VERSION=1.22.2 \
+    && cd /usr/src \
     && svn checkout svn://scm.orgis.org/mpg123/tags/$MPG123_VERSION mpg123-$MPG123_VERSION \
     && cd mpg123-$MPG123_VERSION \
     && autoreconf -iv \
@@ -197,22 +84,11 @@ RUN cd /usr/src \
         --enable-shared \
         --prefix=/usr/local \
     && make \
-    && make install
-
-#RUN cd /usr/src \
-#    && wget http://files.freeswitch.org/downloads/libs/libsilk-$LIBSILK_VERSION.tar.gz \
-#    && tar -xzvf libsilk-$LIBSILK_VERSION.tar.gz \
-#    && rm libsilk-$LIBSILK_VERSION.tar.gz \
-#    && cd libsilk-$LIBSILK_VERSION \
-#    && ./bootstrap.sh \
-#    && ./configure \
-#        --enable-shared \
-#        --prefix=/usr/local \
-#    && make \
-#    && make install
-
-# for mod_sndfile
-RUN cd /usr/src \
+    && make install \
+    \
+    && echo "for mod_sndfile" \
+    && export LIBSNDFILE_VERSION=1.0.25 \
+    && cd /usr/src \
     && wget http://www.mega-nerd.com/libsndfile/files/libsndfile-$LIBSNDFILE_VERSION.tar.gz \
     && tar -xzvf libsndfile-$LIBSNDFILE_VERSION.tar.gz \
     && rm libsndfile-$LIBSNDFILE_VERSION.tar.gz \
@@ -221,10 +97,11 @@ RUN cd /usr/src \
         --enable-shared \
         --prefix=/usr/local \
     && make \
-    && make install
-
-# for mod_soundtouch
-RUN cd /usr/src \
+    && make install \
+    \
+    && echo "for mod_soundtouch" \
+    && export SOUNDTOUCH_VERSION=1.9.0 \
+    && cd /usr/src \
     && wget http://www.surina.net/soundtouch/soundtouch-$SOUNDTOUCH_VERSION.tar.gz \
     && tar -xzvf soundtouch-$SOUNDTOUCH_VERSION.tar.gz \
     && rm soundtouch-$SOUNDTOUCH_VERSION.tar.gz \
@@ -234,18 +111,9 @@ RUN cd /usr/src \
         --enable-shared \
         --prefix=/usr/local \
     && make \
-    && make install
-
-#RUN cd /usr/src \
-#    && git clone git://git.osmocom.org/libsmpp34 \
-#        --depth=1 \
-#    && cd libsmpp34 \
-#    && autoreconf -i \
-#    && ./configure \
-#    && make \
-#    && make install
-
-RUN ldconfig
+    && make install \
+    \
+    && ldconfig
 
 COPY conf/freeswitch.conf /etc/fail2ban/filter.d/freeswitch.conf
 COPY conf/freeswitch-dos.conf /etc/fail2ban/filter.d/freeswitch-dos.conf
@@ -275,30 +143,24 @@ COPY sysv/init /etc/init.d/freeswitch
 COPY sysv/default /etc/default/freeswitch
 
 RUN chmod +x /etc/init.d/freeswitch \
-    && update-rc.d -f freeswitch defaults
-
-# Add the freeswitch user.
-RUN adduser \
-    --gecos "FreeSWITCH Voice Platform" \
-    --no-create-home \
-    --disabled-login \
-    --disabled-password \
-    --system \
-    --ingroup daemon \
-    --home /usr/local/freeswitch \
-    $FREESWITCH_USER
-
-RUN chown -R $FREESWITCH_USER:daemon /usr/local/freeswitch
-
-# Create the log file.
-RUN touch $FREESWITCH_LOGDIR/freeswitch.log \
+    && update-rc.d -f freeswitch defaults \
+    && adduser \
+        --gecos "FreeSWITCH Voice Platform" \
+        --no-create-home \
+        --disabled-login \
+        --disabled-password \
+        --system \
+        --ingroup daemon \
+        --home /usr/local/freeswitch \
+        $FREESWITCH_USER \
+    && chown -R $FREESWITCH_USER:daemon /usr/local/freeswitch \
+    && touch $FREESWITCH_LOGDIR/freeswitch.log \
     && chown $FREESWITCH_USER:daemon $FREESWITCH_LOGDIR/freeswitch.log
 
 VOLUME [ "$FREESWITCH_LOGDIR" ]
 
 # for SIP signal trafic 5998 for internal interface and 5080 for external providers
 EXPOSE 5998/udp 5080/udp
-
 EXPOSE 8021/tcp
 EXPOSE 64535-65535/udp
 
