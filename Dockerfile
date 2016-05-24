@@ -48,6 +48,7 @@ RUN set -x \
         nasm \
         portaudio19-dev \
         python-dev \
+        snmpd \
         subversion \
         unixodbc-dev \
         uuid-dev \
